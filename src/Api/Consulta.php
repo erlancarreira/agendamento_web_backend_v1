@@ -2,31 +2,25 @@
 
 namespace App\Api;
 
-use Exception;
-// use InvalidArgumentException;
-// use Request;
-
+use App\Models\Consulta as ConsultaModel;
 
 class Consulta
 {
-    public static function getLimitacoesPorConvenio(array $request): array {
-       
-        $convenio_id = $request['idConvenio'];
+    public static function getLimitacoesPorConvenio(array $request): array 
+    {
+        $convenio_id = $request['idConvenio'] ?? null;
 
-        $data = [];
-
-        if ($convenio_id) {
-
-            $response = \App\Models\Consulta::where('convenio_id', $convenio_id)->first();
-
-            if ($response) {
-                $data[] = $response;
-            }
-
+        if (!$convenio_id) {
+            return [];
         }
 
-        return $data;
-        
+        $response = ConsultaModel::where('convenio_id', $convenio_id)->first();
+
+        if (!$response) {
+            return [];
+        }
+
+        return $response->toArray();
     }
-    
+
 }
