@@ -2,7 +2,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/slimphp/Slim-Skeleton/badge.svg?branch=master)](https://coveralls.io/github/slimphp/Slim-Skeleton?branch=master)
 
-API para gerenciamento de clínicas médicas construída com Slim Framework 4.
+API para gerenciamento de clínicas médicas construída com Slim Framework 4. Teste
 
 ## Instalação
 
