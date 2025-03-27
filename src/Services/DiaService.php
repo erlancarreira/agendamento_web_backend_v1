@@ -20,7 +20,7 @@ class DiaService
 
     public function getHistoricoLimitacoes(array $params): array
     { 
-        $historico = Agenda::getHistoricoAgendamentoPaciente($params);
+        $historico  = Agenda::getHistoricoAgendamentoPaciente($params);
         $limitacoes = Consulta::getLimitacoesPorConvenio($params);
         return [$historico, $limitacoes];
     }
@@ -34,25 +34,26 @@ class DiaService
     {
         $state = [
             'appointments' => [],
-            'quantidade' => 0
+            'quantidade'   => 0
         ];
 
-        $data = Consulta::getLimitacoesPorConvenio($request);
-        if (empty($data)) {
+        $data = $this->getHistoricoLimitacoes($request);
+        
+        if (count($data) === 0) {
             return $state;
         }
 
-        [$historicoAtendimentos, $limiteConsultas] = $data;
+        [ $historicoAtendimentos, $limitConsult ] = $data;
 
-        if (empty($limiteConsultas)) {
+        if (count($limitConsult) === 0) {
             return $state;
         }
 
-        $limitConsult        = $limiteConsultas[0];
         $convenioId          = $limitConsult['convenio_id'];
-        $state['quantidade'] = (int) $limitConsult['quantidade'];
+        $state['quantidade'] = $limitConsult['quantidade'];
 
         foreach ($historicoAtendimentos as $atendimento) {
+
             if (!isset($atendimento['idConvenio'], $atendimento['dataAgenda'])) {
                 continue;
             }
@@ -62,9 +63,11 @@ class DiaService
             }
 
             $isWithinCurrentMonthDate = Helper::isWithinCurrentMonth($atendimento['dataAgenda']);
+
             if ($isWithinCurrentMonthDate->isAfter) {
                 $state['appointments'][] = $atendimento;
             }
+
         }
 
         return $state;
@@ -85,11 +88,10 @@ class DiaService
     {
         $returns          = Agenda::getConsultaRetornoAtendimentoPaciente($params);
         $days             = $this->getDiasHorariosConsultas($params, $returns);
-        
         $appointmentsData = $this->getLimiteConvenio($params);
-        
-        $appointments = $appointmentsData['appointments'];
-        $quantity     = $appointmentsData['quantidade'];
+
+        $appointments     = $appointmentsData['appointments'];
+        $quantity         = $appointmentsData['quantidade'];
 
         $appointmentDates = $this->DateManipulator->addOneMonthToAppointments($appointments);
 
