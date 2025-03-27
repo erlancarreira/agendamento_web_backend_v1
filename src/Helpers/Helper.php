@@ -352,23 +352,23 @@ class Helper {
         $currentMonthEnd->setTime(23, 59, 59); // Final do dia
 
         // Convertendo a data de entrada para o fuso horário de São Paulo
-        $date = \DateTime::createFromFormat('Y-m-d', $date, $timezone);
+        $date = \DateTime::createFromFormat('d/m/Y H:i', $date, $timezone);
         if ($date === false) {
-            // Handle error if date parsing fails
+            // Se falhar ao parsear a data, retorna null
             return null;
         }
 
         // Convertendo para timestamp
         $currentMonthStartTimestamp = $currentMonthStart->getTimestamp();
-        $currentMonthEndTimestamp = $currentMonthEnd->getTimestamp();
-        $dateTimestamp = $date->getTimestamp();
+        $currentMonthEndTimestamp   = $currentMonthEnd->getTimestamp();
+        $dateTimestamp              = $date->getTimestamp();
 
         // Verificando se a data está dentro do mês atual
-        $isAfter = $dateTimestamp >= $currentMonthStartTimestamp && $dateTimestamp <= $currentMonthEndTimestamp;
+        $isAfter           = $dateTimestamp >= $currentMonthStartTimestamp && $dateTimestamp <= $currentMonthEndTimestamp;
         $daysBeforeOrAfter = ($dateTimestamp - $currentMonthStartTimestamp) / (60 * 60 * 24);
 
         return (object) [
-            'isAfter' => $isAfter,
+            'isAfter'           => $isAfter,
             'daysBeforeOrAfter' => $daysBeforeOrAfter
         ];
 
