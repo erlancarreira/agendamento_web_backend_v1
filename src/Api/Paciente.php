@@ -42,8 +42,6 @@ class Paciente
             
             $data = Api::post(self::$pathname, $body); 
 
-            
-
             if (isset($data['status']) && $data['status'] === -1) {
                 
                 return $data;
@@ -68,10 +66,9 @@ class Paciente
 
         $validator = new createValidator();
 
-        $validator->validate($params);
+        $validator->validate($request);
         
-        $body = array_merge($params, [
-            'funcao' => $funcao, 
+        $body = array_merge($request, [
             'cpfPaciente' => preg_replace('/[^0-9]/', '', $params['cpfPaciente']),
             'numeroCelularPaciente' => preg_replace('/[^0-9]/', '', $params['numeroCelularPaciente'])
         ]);

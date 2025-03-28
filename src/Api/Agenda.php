@@ -3,14 +3,11 @@
 namespace App\Api;
 use App\Builders\RequestBodyBuilder;
 use App\Factories\ResponseFactory;
-use App\Helpers\Helper;
 use App\Http\Client\Clinnet\Api;
 use App\Api\Paciente;
 use App\Validators\Agenda\agendarValidator;
 use App\Validators\ParamsValidator;
 use Exception;
-// use InvalidArgumentException;
-// use Request;
 
 
 class Agenda
@@ -73,11 +70,7 @@ class Agenda
 
         $response = Api::post(self::$pathname, $body);
 
-        if ($response['dados'] && count($response['dados']) > 0) {
-            return $response['dados'];
-        }
-
-        return [];
+        return $response['dados'] ?? [];
     }
 
     public static function getHorariosConsultaMensal(array $params): array {
@@ -93,12 +86,7 @@ class Agenda
 
         $response = API::post(self::$pathname, $body);
 
-        if ($response['dados'] && count($response['dados']) > 0) {
-            
-            return $response['dados'];
-        }
-
-        return [];
+        return $response['dados'] ?? [];
     }
     
     public static function getHorariosConsulta(array $params): array {
@@ -124,11 +112,7 @@ class Agenda
 
             $data = API::post(self::$pathname, $body);
 
-            if ($data['dados'] && count($data['dados']) > 0) {
-                return $data['dados'];
-            }
-
-            return [];
+            return $data['dados'] ?? [];
             
         } catch (Exception $error) {
             // Log the error if necessary
@@ -163,7 +147,7 @@ class Agenda
             $responseHandler = ResponseFactory::create($client, $apiService, Agenda::$pathname);
             $response        = $responseHandler->createResponse($body);          
 
-            return $response;
+            return $response['dados'] ?? [];
         
         } catch (Exception $error) {
             error_log($error->getMessage() . ' ERROR');
