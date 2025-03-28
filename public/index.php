@@ -43,6 +43,7 @@ try {
     // Instantiate the app
     AppFactory::setContainer($container);
     $app = AppFactory::create();
+    $app->setBasePath('/api');
     $callableResolver = $app->getCallableResolver();
 
     // Register middleware
